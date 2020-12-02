@@ -15,7 +15,7 @@ const WhoIsloginPage = props => {
         //dispatch(loadForm(whoIslogin))
         dispatch(loadRestaurant())
         //props.navigation.openDrawer()
-        //props.navigation.navigate('Home')
+        props.navigation.navigate('Home')
 
     }
     return (
