@@ -1,0 +1,16 @@
+
+> core-js-pure@3.6.5 postinstall C:\Users\Harel\Desktop\myapp\App\frontend\node_modules\core-js-pure
+> node -e "try{require('./postinstall')}catch(e){}"
+
+[96mThank you for using core-js ([94m https://github.com/zloirock/core-js [96m) for polyfilling JavaScript standard library![0m
+
+[96mThe project needs your help! Please consider supporting of core-js on Open Collective or Patreon: [0m
+[96m>[94m https://opencollective.com/core-js [0m
+[96m>[94m https://www.patreon.com/zloirock [0m
+
+[96mAlso, the author of core-js ([94m https://github.com/zloirock [96m) is looking for a good job -)[0m
+
++ react-native-vector-icons@7.0.0
+added 14 packages from 7 contributors and audited 1172 packages in 21.274s
+found 6012 low severity vulnerabilities
+  run `npm audit fix` to fix them, or `npm audit` for details
