@@ -1,5 +1,5 @@
 import React, {  useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet,I18nManager } from 'react-native'
 import MyButton from '../UI/MyButton'
 
 
@@ -50,7 +50,7 @@ const OrderItem = props => {
 const styles = StyleSheet.create({
     itemContainer: {
        paddingBottom:20,
-        flexDirection: 'row-reverse',
+        flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse'),
         justifyContent: 'space-around'
     },
     button: {
@@ -62,10 +62,10 @@ const styles = StyleSheet.create({
     },
     detailsItem: {
         padding: 4,
-        marginLeft: 15,
-        marginRight: 30,
+        marginEnd: 15,
+        marginStart: 30,
        
-        flexDirection: 'row-reverse',
+        flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse'),
         justifyContent: 'space-between'
     }
 })

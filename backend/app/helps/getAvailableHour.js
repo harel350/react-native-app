@@ -11,8 +11,9 @@ const getAvailableHour = (data, tableData) => {
             people: item.sumOfPeople
         }
     })
+    
     //loop all the hour and check what time is available
-    console.log('order array')
+    console.log('the order array from getavailableHour line 14')
     console.table(orderArray)
     let listOfAvailableHour = allHour.map((hour) => {
         return checkHour(hour, hour + 0.5, orderArray, tableData)

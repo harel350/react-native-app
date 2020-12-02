@@ -1,5 +1,6 @@
 import React from 'react'
 import PageNavigation from './Routes/PageNavigator'
+import {I18nManager} from 'react-native'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import ReduxThunk from 'redux-thunk'
 import { Provider } from 'react-redux'

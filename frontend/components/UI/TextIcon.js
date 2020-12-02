@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity,I18nManager } from 'react-native'
 import Icon1 from 'react-native-vector-icons/Ionicons'
 import Icon2 from 'react-native-vector-icons/FontAwesome'
 import Icon3 from 'react-native-vector-icons/EvilIcons'
@@ -33,7 +33,7 @@ const TextIcon = props => {
 }
 const styles = StyleSheet.create({
     cotainer: {
-        flexDirection: 'row-reverse',
+        flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse'),
         justifyContent: 'space-between',
         marginHorizontal: 20,
         paddingHorizontal: 10,

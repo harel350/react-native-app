@@ -18,6 +18,7 @@ router.post('/getAvailableHour/:restaurantName', bodyParser.json(), (req, res) =
                 WHERE r."restaurantName" = '${req.params.restaurantName}' AND "dateOfOrder"='${date}'  `,
         (err, response) => {
             if (err) return console.error(err)
+            console.log('the first step in the process')
             console.table(response.rows)
             
             const tablePerHour = getAvailableHour(response.rows, tableData)

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, StyleSheet, ImageBackground } from 'react-native'
+import { View, StyleSheet, ImageBackground,I18nManager } from 'react-native'
 import RestaurantGeneral from '../../components/RestaurantPage/RestaurantGeneral'
 import RestaurantMyOrder from '../../components/RestaurantPage/RestaurantMyOrder'
 import RestaurantFeedback from '../../components/RestaurantPage/RestaurantFeedback'
@@ -48,7 +48,7 @@ const RestaurantPage = props => {
 const styles = StyleSheet.create({
     optionContainer: {
         
-        flexDirection: 'row-reverse',
+        flexDirection:(I18nManager.isRTL ? 'row' : 'row-reverse'),
         justifyContent: 'space-between',
         marginHorizontal: 20,
         paddingHorizontal: 10,

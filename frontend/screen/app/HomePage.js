@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Text, FlatList, ScrollView } from 'react-native'
+import { View, StyleSheet, Text, FlatList,I18nManager, Button } from 'react-native'
 import OptionCard from '../../components/HomePage/OptionCard'
 import RestaurantCard from '../../components/HomePage/RestaurantCard'
 import { useSelector } from 'react-redux'
@@ -15,13 +15,13 @@ const HomePage = props => {
             
             <FlatList
                 horizontal
-                inverted={true}
+                inverted={false}
                 initialNumToRender={2}
                 data={restaurant}
                 keyExtractor={item => (item.idRestaurant).toString()}
                 renderItem={(itemData) => { return (<RestaurantCard navigation={props.navigation} data={itemData.item}  />) }}
             />
-
+            
 
         </View>
     )

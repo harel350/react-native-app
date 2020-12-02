@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet,I18nManager } from 'react-native'
 import MyButton from '../UI/MyButton'
 const RestaurantButtonOption = props => {
     const {takeAway,orderTable,delivery} = props.data
@@ -14,7 +14,7 @@ const RestaurantButtonOption = props => {
         }
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row-reverse',
+        flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse'),
         justifyContent: 'space-between',
         marginHorizontal: 20,
         

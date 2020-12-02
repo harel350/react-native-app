@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, TextInput, Text, StyleSheet, Button, Alert } from 'react-native'
+import { View, TextInput, Text, StyleSheet, Button, Alert,I18nManager } from 'react-native'
 import TextIcon from '../../components/UI/TextIcon'
 import BoxDetails from '../../components/UI/BoxDetails'
 import Autocomplete from 'react-native-dropdown-autocomplete-textinput'
@@ -144,7 +144,7 @@ const OrderPlacePage = (props) => {
                 <TextIcon size={30} text={restaurantDetails.restaurantAddress} iconName='call' typeIcon='Ionicons' />
             </BoxDetails>
             <View>
-                <View style={{ flexDirection: 'row-reverse' }}>
+                <View style={{ flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse') }}>
                     <Autocomplete
                         data={dateArray}
                         displayKey="date"
@@ -164,7 +164,7 @@ const OrderPlacePage = (props) => {
                         isMandatory
                     />
                 </View>
-                <View style={{ flexDirection: 'row-reverse' }}>
+                <View style={{ flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse') }}>
                     <Autocomplete
                         data={allStartHour}
                         displayKey="startHour"
