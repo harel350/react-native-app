@@ -20,6 +20,7 @@ const RestaurantGeneral = props => {
     }
     const goToWaze = () => {
         const address =  encodeURI(`${generalDetails.address}`)
+       
         Linking.openURL(`waze://?q=${address}&navigate=yes`)
     }
     

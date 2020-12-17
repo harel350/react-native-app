@@ -58,8 +58,11 @@ const MainNavigator = createDrawerNavigator({
     App: AppNavigator,
     Register: RegisterNavigator
 }, {
+    
     initialRouteName: 'App',
-    drawerType: 'front'
+    drawerPosition:'right',
+    drawerType:'front',
+   
 })
 
 export default createAppContainer(MainNavigator)
