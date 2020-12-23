@@ -29,9 +29,9 @@ const AppNavigator = createStackNavigator({
 
 
         header: (({ scene, previous, navigation }) => {
-            console.log('the scene', scene)
+           /* console.log('the scene', scene)
             console.log('the previous', previous)
-            console.log('the navigation', navigation)
+            console.log('the navigation', navigation)*/
             return (
                 <TextIcon
                 iconName='navicon' 

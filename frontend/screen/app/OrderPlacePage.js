@@ -7,6 +7,7 @@ import Autocomplete from 'react-native-dropdown-autocomplete-textinput'
 const OrderPlacePage = (props) => {
     const [restaurantDetails, setrestaurantDetails] = useState({ restaurantName: '', restaurantAddress: 'לא נבחרה מסעדה', restaurantPhone: 'לא נבחרה מסעדה' })
     const [searchList, setSearchList] = useState([])
+    const [allFinishHour,setAllFinishHour]=useState([{finishHour:''}])
     const [openList, setOpenList] = useState(false)
     const [showSummary, setShowSummary] = useState(false)
     const [orderDetails, setOrderDetails] = useState({ date: null, startHour: null, finishHour: null, sumOfPeople: null })
@@ -24,7 +25,7 @@ const OrderPlacePage = (props) => {
        
     }
     const allStartHour = new Array(24).fill(12).map((item, index) =>{return {startHour : hourMaping(item, index)}})
-    const allFinishHour = new Array(24).fill(12).map((item, index) => { return { finishHour: hourMaping(item, index+1)} })
+    
     const peopleArray = new Array(14).fill(1).map((item, index) => { return { sumOfPeople: `${item + index * 1}` } })
     const dateArray = new Array(7).fill(null).map((item, index) => { return { date: new Date(new Date().getTime() + (24 * index) * 60 * 60 * 1000).toISOString().split('T')[0] } })
     
@@ -59,6 +60,12 @@ const OrderPlacePage = (props) => {
         setOrderDetails({ ...orderDetails, ...dateValue })
     }
     const selectHourHandle = (hourValue) => {
+        if(Object.keys(hourValue)=='startHour'){
+            let finishHourAvailable = new Array(24).fill(12).map((item, index) => { return { finishHour: hourMaping(item, index+1)} })
+            const hourSelectedIndex = finishHourAvailable.findIndex((item)=>item.finishHour == hourValue.startHour)
+            finishHourAvailable = finishHourAvailable.slice(hourSelectedIndex+1)
+            setAllFinishHour(finishHourAvailable)
+        }
         setOrderDetails({ ...orderDetails, ...hourValue })
         setShowSummary(false)
     }

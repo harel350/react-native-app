@@ -29,7 +29,7 @@ const RestaurantGeneral = props => {
             <View>
                 <TextIcon size={30} text={generalDetails.openingHour} iconName='clock-outline' typeIcon='MaterialCommunityIcons'/>
                 <TextIcon size={30} text={props.data.restaurantPhone} onPress={goToCellPhone} iconName='phone-in-talk-outline' typeIcon='MaterialCommunityIcons' />
-                <TextIcon size={30} text={generalDetails.address} iconName='location-outline' typeIcon='Iconics' onPress={()=>{console.log('yes func')}} />
+                <TextIcon size={30} text={generalDetails.address} iconName='location-outline' typeIcon='Ionicons' onPress={()=>{console.log('yes func')}} />
                 <TextIcon size={30} text='נווט למסעדה' onPress={goToWaze} iconName='waze' typeIcon='MaterialCommunityIcons' />
                 <TextIcon size={30} text='לאתר המסעדה' onPress={goToWeb} iconName='web' typeIcon='MaterialCommunityIcons' />
                 <RestaurantButtonOption data={props.data} navigation={props.navigation}/>
