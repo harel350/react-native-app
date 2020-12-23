@@ -94,7 +94,6 @@ const OrderPlacePage = (props) => {
         /*console.log('the press text:', text.restaurantName)
         const response = await fetch(`http://localhost:4000/orderTable/getAvailableHour/${text.restaurantName}`)
         const resData = await response.json()
-
         console.log(resData)*/
         setrestaurantDetails(text)
         setOpenList(false)

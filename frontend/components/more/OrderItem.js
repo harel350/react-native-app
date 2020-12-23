@@ -7,7 +7,7 @@ import MyButton from '../UI/MyButton'
 const OrderItem = props => {
     const [showDetails, setShowDetails] = useState(false)
     const { data } = props
-    console.log(data.restaurantName)
+   
     return (
         <View>
             <View style={styles.itemContainer}>
