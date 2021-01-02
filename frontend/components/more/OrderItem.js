@@ -1,5 +1,5 @@
-import React, {  useState } from 'react'
-import { View, Text, StyleSheet,I18nManager } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, I18nManager } from 'react-native'
 import MyButton from '../UI/MyButton'
 
 
@@ -7,13 +7,14 @@ import MyButton from '../UI/MyButton'
 const OrderItem = props => {
     const [showDetails, setShowDetails] = useState(false)
     const { data } = props
-   
+
     return (
         <View>
             <View style={styles.itemContainer}>
                 {props.date && <Text>{data.dateOfOrder.slice(0, 10)}</Text>}
                 {props.restaurantName && <Text>{data.restaurantName}</Text>}
                 {props.totalPay && <Text>{data.totalPay}</Text>}
+                {props.status && <Text>{data.orderStatus}</Text>}
                 <MyButton styleText={styles.button} onPress={() => { setShowDetails(prevState => !prevState) }} title='פרטים >' />
 
             </View>
@@ -36,11 +37,6 @@ const OrderItem = props => {
                         <Text>כמה עלה : </Text>
                         <Text>{data.totalPay}</Text>
                     </View>
-
-
-
-
-
                 </View>
             }
 
@@ -49,7 +45,7 @@ const OrderItem = props => {
 }
 const styles = StyleSheet.create({
     itemContainer: {
-       paddingBottom:20,
+        paddingBottom: 20,
         flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse'),
         justifyContent: 'space-around'
     },
@@ -64,7 +60,7 @@ const styles = StyleSheet.create({
         padding: 4,
         marginEnd: 15,
         marginStart: 30,
-       
+
         flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse'),
         justifyContent: 'space-between'
     }

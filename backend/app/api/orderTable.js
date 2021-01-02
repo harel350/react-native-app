@@ -42,8 +42,8 @@ router.post('/newOrder/:idRestaurant', bodyParser.json(), (req, res) => {
             }
             const table = takeThisTable(sumOfPeople,result.tableIsAvailablePerOrder)
             console.log(startHour, finishHour)
-            pool.query(`INSERT INTO order_reservation("dateOfOrder","hourOfOrder","hourOfFinish","sumOfPeople","tableId","idRestaurant")
-                VALUES($1,time '${startHour}',time '${finishHour}',$2,$3,$4) RETURNING "orderId"` ,
+            pool.query(`INSERT INTO order_reservation("dateOfOrder","hourOfOrder","hourOfFinish","sumOfPeople","tableId","idRestaurant","orderStatus")
+                VALUES($1,time '${startHour}',time '${finishHour}',$2,$3,$4,'active') RETURNING "orderId"` ,
                 [date,sumOfPeople, table, idRest],
                 (err, response) => {
                     if (err) return console.error(err)

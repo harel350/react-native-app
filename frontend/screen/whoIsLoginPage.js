@@ -9,13 +9,40 @@ import Icon from 'react-native-vector-icons/Ionicons'
 const WhoIsloginPage = props => {
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
+   /* const willFocusTest = props.navigation.addListener(
+        'willFocus',
+        payLoad =>{
+            console.log('willFocusTest',payLoad)
+        }
+    )
+    const didFocusTest = props.navigation.addListener(
+        'didFocus',
+        payLoad =>{
+            console.log('didFocusTest',payLoad)
+        }
+    )
+    const willBlurTest = props.navigation.addListener(
+        'willBlur',
+        payLoad =>{
+            console.log('willBlur',payLoad)
+        }
+    )
+    const didBlurTest = props.navigation.addListener(
+        'didBlur',
+        payLoad =>{
+            console.log('didBlur',payLoad)
+        }
+    )*/
     const pressHandle = (whoIslogin) => {
         //Linking.openURL("waze://?{params}&navigate=yes")
         setLoading(true)
         //dispatch(loadForm(whoIslogin))
         dispatch(loadRestaurant())
         //props.navigation.openDrawer()
-        props.navigation.navigate('Home')
+        
+        
+        //newTest.remove()
+        props.navigation.navigate('Home',{test:'hello Home'})
 
     }
     return (
@@ -52,7 +79,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        
 
     },
     icon: {

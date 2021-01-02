@@ -24,8 +24,8 @@ const TextIcon = props => {
 
     return (
         <TouchableOpacity onPress={props.onPress ?? (() => { })} >
-            <View style={styles.cotainer}>
-                <Text style={styles.text}>{props.text ?? ''}</Text>
+            <View style={{...styles.cotainer,...props.style}}>
+                <Text style={{...styles.text,...props.styleText}}>{props.text ?? ''}</Text>
                 {icon}
             </View>
         </TouchableOpacity >
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontWeight: 'bold',
+        
 
     }
 })

@@ -8,17 +8,17 @@ const RestaurantMyOrder = props => {
    const data = props.orderData.filter((item)=> item.restaurantName == props.restaurantName)
    
     return (
-        <View style={styles.container} >
+        <View style={styles.container}>
             <View style={styles.itemContainer}>
                 <Text style={styles.headLineText}>תאריך</Text>
-                <Text style={styles.headLineText}>שם מסעדה</Text>
+                <Text style={styles.headLineText}>סטטוס</Text>
                 <Text style={styles.headLineText}>מידע נוסף</Text>
             </View>
             <FlatList
                     
                     data={data}
                     keyExtractor={item => (item.orderId).toString()}
-                    renderItem={(itemData) => { return (<OrderItem navigation={props.navigation} date restaurantName data={itemData.item} />) }}
+                    renderItem={(itemData) => { return (<OrderItem navigation={props.navigation} status date  data={itemData.item} />) }}
                 />
 
         </View>
