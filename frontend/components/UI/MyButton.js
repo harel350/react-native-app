@@ -12,7 +12,7 @@ const MyButton = props => {
 }
 const styles = StyleSheet.create({
     text : {
-        textDecorationLine : 'underline',
+        //textDecorationLine : 'underline',
         fontSize: 17,
     }
 })

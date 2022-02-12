@@ -13,7 +13,7 @@ export const loadForm = (whoIsLogin) => {
         }
 
         const resData = await response.json()
-        console.log('this is res data : ',resData)
+        //console.log('this is res data : ',resData)
         dispatch({ type: LOAD_FORM, dataForm: resData,whoIsLogin })
 
     }
@@ -27,7 +27,7 @@ export const loadRestaurant= () => {
         }
 
         const resData = await response.json()
-        console.log('this is res data : ',resData)
+        //console.log('this is res data : ',resData)
         dispatch({ type: LOAD_RESTAURANT, dataRest: resData })
 
     }

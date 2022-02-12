@@ -19,11 +19,17 @@ router.get('/searchRestaurant/:search', (req, res) => {
     })
 })
 router.get('/myOrder', (req, res) => {
-    pool.query(`SELECT "orderId", "dateOfOrder","hourOfOrder","hourOfFinish","sumOfPeople","totalPay","currency",r."restaurantName" FROM order_reservation 
-                JOIN restaurant AS r ON order_reservation."idRestaurant" = r."idRestaurant"`,
+    pool.query(`SELECT "orderId", "dateOfOrder","hourOfOrder","hourOfFinish","sumOfPeople","totalPay","currency","orderStatus",r."restaurantName" FROM order_reservation 
+    JOIN restaurant AS r ON order_reservation."idRestaurant" = r."idRestaurant"
+    ORDER BY "dateOfOrder" DESC`,
         (err, response) => {
             if (err) return console.error(err)
-            res.json(response.rows)
+            const orderDataByRest = response.rows.map(item => { 
+                item.dateOfOrder.setDate(item.dateOfOrder.getDate()+1)
+
+                return {...item,...item.dateOfOrder}})
+            console.table(orderDataByRest)
+            res.json(orderDataByRest)
         })
 })
 

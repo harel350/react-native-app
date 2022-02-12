@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { View, TextInput, Text, StyleSheet, Button, Alert,I18nManager } from 'react-native'
+import { View, TextInput, Text, StyleSheet, Button, Alert, I18nManager } from 'react-native'
 import TextIcon from '../../components/UI/TextIcon'
 import BoxDetails from '../../components/UI/BoxDetails'
 import Autocomplete from 'react-native-dropdown-autocomplete-textinput'
+import AwesomeAlert from 'react-native-awesome-alerts'
+import SearchBox from '../../components/more/SearchBox'
+import MyButton from '../../components/UI/MyButton'
 
 const OrderPlacePage = (props) => {
     const [restaurantDetails, setrestaurantDetails] = useState({ restaurantName: '', restaurantAddress: 'לא נבחרה מסעדה', restaurantPhone: 'לא נבחרה מסעדה' })
-    const [searchList, setSearchList] = useState([])
-    const [openList, setOpenList] = useState(false)
-    const [showSummary, setShowSummary] = useState(false)
+    const [allFinishHour, setAllFinishHour] = useState([{ finishHour: '' }])//array of the available finish hour
+
+    const [allFieldFull, setAllFieldFull] = useState(false)//check valid if all the field are full
     const [orderDetails, setOrderDetails] = useState({ date: null, startHour: null, finishHour: null, sumOfPeople: null })
+
+    const [showSummary, setShowSummary] = useState(false)
     const hourMaping = (item, index) => {
-        let hourstring =parseInt(item + index * 0.5)
+        let hourstring = parseInt(item + index * 0.5)
         if (index % 2 == 0) {
 
             hourstring = hourstring.toString() + ':00'
@@ -19,37 +24,35 @@ const OrderPlacePage = (props) => {
         else {
             hourstring = hourstring.toString() + ':30'
         }
-       
+
         return hourstring
-       
     }
-    const allStartHour = new Array(24).fill(12).map((item, index) =>{return {startHour : hourMaping(item, index)}})
-    const allFinishHour = new Array(24).fill(12).map((item, index) => { return { finishHour: hourMaping(item, index+1)} })
+    //initial state
+    const allStartHour = new Array(24).fill(12).map((item, index) => { return { startHour: hourMaping(item, index) } })
     const peopleArray = new Array(14).fill(1).map((item, index) => { return { sumOfPeople: `${item + index * 1}` } })
     const dateArray = new Array(7).fill(null).map((item, index) => { return { date: new Date(new Date().getTime() + (24 * index) * 60 * 60 * 1000).toISOString().split('T')[0] } })
-    
-    
+
+
 
 
     useEffect(() => {
-        
-
         const DataFromPickRestaurant = props.navigation.getParam('dataOfPickRestaurant')
         if (DataFromPickRestaurant != undefined) {
             setrestaurantDetails({
                 restaurantName: DataFromPickRestaurant.restaurantName,
                 restaurantAddress: DataFromPickRestaurant.restaurantAddress,
                 restaurantPhone: DataFromPickRestaurant.restaurantPhone,
-                tableOfSeats : DataFromPickRestaurant.tableOfSeats
+                tableOfSeats: DataFromPickRestaurant.tableOfSeats
             })
         }
 
     }, [])
     useEffect(() => {
-        setShowSummary(false)
-        const test = Object.values(orderDetails).find(item => item == null)
-        if (test === undefined) {
-            setShowSummary(true)
+
+        setAllFieldFull(false)
+        const checkAllField = Object.values(orderDetails).find(item => item == null)
+        if (checkAllField === undefined) {
+            setAllFieldFull(true)
         }
 
     }, [orderDetails])
@@ -59,6 +62,12 @@ const OrderPlacePage = (props) => {
         setOrderDetails({ ...orderDetails, ...dateValue })
     }
     const selectHourHandle = (hourValue) => {
+        if (Object.keys(hourValue) == 'startHour') {
+            let finishHourAvailable = new Array(24).fill(12).map((item, index) => { return { finishHour: hourMaping(item, index + 1) } })
+            const hourSelectedIndex = finishHourAvailable.findIndex((item) => item.finishHour == hourValue.startHour)
+            finishHourAvailable = finishHourAvailable.slice(hourSelectedIndex + 1)
+            setAllFinishHour(finishHourAvailable)
+        }
         setOrderDetails({ ...orderDetails, ...hourValue })
         setShowSummary(false)
     }
@@ -66,31 +75,8 @@ const OrderPlacePage = (props) => {
         setOrderDetails({ ...orderDetails, ...peopleValue })
         setShowSummary(false)
     }
-    const changeTextHandle = async (text) => {
-
-        let isOpen = false
-        if (text != '') {
-
-            const response = await fetch(`http://localhost:4000/info/searchRestaurant/${text}`)
-            let searchListArray = await response.json()
-            setSearchList(searchListArray)
-            isOpen = true
-
-        }
-
-        let restaurantName = { restaurantName: text }
-        let newInput = { ...restaurantDetails, ...restaurantName }
-        setrestaurantDetails(newInput)
-        setOpenList(isOpen)
-    }
-    const searchPressHandle = async (text) => {
-        /*console.log('the press text:', text.restaurantName)
-        const response = await fetch(`http://localhost:4000/orderTable/getAvailableHour/${text.restaurantName}`)
-        const resData = await response.json()
-
-        console.log(resData)*/
+    const searchPressHandle = (text) => {
         setrestaurantDetails(text)
-        setOpenList(false)
     }
     const checkHourButtonHandle = () => {
 
@@ -106,8 +92,9 @@ const OrderPlacePage = (props) => {
             .then((result) => {
                 const tablePerHour = { tablePerHour: result.tablePerHour }
                 setOrderDetails({ ...orderDetails, ...tablePerHour })
-                result.Ok ? Alert.alert('sucess', result.text, [{ text: 'ok' }]) : Alert.alert('Attention', result.text, [{ text: 'ok' }])
+                result.Ok ? setShowSummary(true) : setShowSummary(false)
             })
+
     }
     const orderButtonHandle = () => {
 
@@ -119,116 +106,140 @@ const OrderPlacePage = (props) => {
             },
             body: JSON.stringify(orderDetails)
         })
+        setShowSummary(false)
     }
-    const optionPlaceList = (<View style={styles.listContainer}>
-        {
-            openList && searchList.map((restOption, index) => {
-                return (<Text style={styles.textDetails} onPress={searchPressHandle.bind(this, restOption)} key={index}>{restOption.restaurantName} - {restOption.restaurantAddress}</Text>)
-            })
-        }
+
+    const summaryMessageAlert = (<View>
+        <Text>בתאריך : {orderDetails.date}</Text>
+        <Text>שעת התחלה : {orderDetails.startHour}</Text>
+        <Text>שעת סיום : {orderDetails.finishHour}</Text>
+        <Text>כמה אנשים : {orderDetails.sumOfPeople}</Text>
     </View>)
+
 
 
     return (
         <View>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder='הכנס שם מסעדה'
-                    value={restaurantDetails.restaurantName}
-                    onChangeText={changeTextHandle}
+
+            <SearchBox initialValue='' onPressItem={searchPressHandle} />
+            <BoxDetails style={styles.box}>
+                <TextIcon size={30} text={restaurantDetails.restaurantPhone} iconName='phone-in-talk-outline' typeIcon='MaterialCommunityIcons' />
+                <TextIcon size={30} text={restaurantDetails.restaurantAddress} iconName='location-outline' typeIcon='Ionicons' />
+            </BoxDetails>
+
+            <View style={{ flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse') }}>
+                <Autocomplete
+                    data={dateArray}
+                    displayKey="date"
+                    onSelect={selectDateHandle}
+                    placeholder='תאריך'
+                    floatBottom
+                    isMandatory
+                    textInputStyle={{ width: '48%' }}
+                />
+                <Autocomplete
+                    data={peopleArray}
+                    displayKey="sumOfPeople"
+                    onSelect={selectPeopleHandle}
+                    placeholder='כמות אנשים'
+                    textInputStyle={{ width: '48%' }}
+                    floatBottom
+                    isMandatory
                 />
             </View>
-            {optionPlaceList}
-            <BoxDetails style={styles.box}>
-                <TextIcon size={30} text={restaurantDetails.restaurantPhone} iconName='call' typeIcon='Ionicons' />
-                <TextIcon size={30} text={restaurantDetails.restaurantAddress} iconName='call' typeIcon='Ionicons' />
-            </BoxDetails>
-            <View>
-                <View style={{ flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse') }}>
-                    <Autocomplete
-                        data={dateArray}
-                        displayKey="date"
-                        onSelect={selectDateHandle}
-                        placeholder='תאריך'
-                        floatBottom
-                        isMandatory
-                        textInputStyle={{ width: '48%' }}
-                    />
-                    <Autocomplete
-                        data={peopleArray}
-                        displayKey="sumOfPeople"
-                        onSelect={selectPeopleHandle}
-                        placeholder='כמות אנשים'
-                        textInputStyle={{ width: '48%' }}
-                        floatBottom
-                        isMandatory
-                    />
-                </View>
-                <View style={{ flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse') }}>
-                    <Autocomplete
-                        data={allStartHour}
-                        displayKey="startHour"
-                        onSelect={selectHourHandle}
-                        placeholder='שעת התחלה'
-                        floatBottom
-                        isMandatory
-                        textInputStyle={{ width: '48%' }}
-                    />
-                    <Autocomplete
-                        data={allFinishHour}
-                        displayKey="finishHour"
-                        onSelect={selectHourHandle}
-                        placeholder='שעת סיום'
-                        floatBottom
-                        isMandatory
-                        textInputStyle={{ width: '48%' }}
-                    />
-                </View>
+            <View style={{ flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse') }}>
+                <Autocomplete
+                    data={allStartHour}
+                    displayKey="startHour"
+                    onSelect={selectHourHandle}
+                    placeholder='שעת התחלה'
+                    floatBottom
+                    isMandatory
+                    textInputStyle={{ width: '48%' }}
+                />
+                <Autocomplete
+                    data={allFinishHour}
+                    displayKey="finishHour"
+                    onSelect={selectHourHandle}
+                    placeholder='שעת סיום'
+                    floatBottom
+                    isMandatory
+                    textInputStyle={{ width: '48%' }}
+                />
+                <Button  title="בדוק שעה" disabled={!allFieldFull} onPress={checkHourButtonHandle} />
+
             </View>
-            <Button title="בדוק שעה" disabled={!showSummary} onPress={checkHourButtonHandle} />
-            {showSummary &&
-                <View>
-                    <Text>סיכום ההזמנה</Text>
-                    <Text>בתאריך :  {orderDetails.date} </Text>
-                    <Text>בשעה :  {orderDetails.finishHour} </Text>
-                    <Text>בשעה :  {orderDetails.startHour} </Text>
-                    <Text>כמות אנשים :  {orderDetails.sumOfPeople} </Text>
-                    <Button title='הזמן' onPress={orderButtonHandle} />
-                </View>
-            }
+
+
+
+            <AwesomeAlert
+                show={showSummary}
+                title='סיכום הזמנה'
+                message={summaryMessageAlert}
+                closeOnTouchOutside={true}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText='שנה שעות'
+                confirmText='הזמן'
+                onCancelPressed={() => { setShowSummary(prevState => !prevState) }}
+                onConfirmPressed={orderButtonHandle}
+                contentContainerStyle={styles.content}
+                contentStyle={styles.contentX}
+                titleStyle={styles.title}
+                messageStyle={styles.messageAlert}
+            />
+
+
         </View>
     )
+
 }
 const styles = StyleSheet.create({
-    inputContainer: {
-        paddingTop: 10,
-        width: '90%',
-        alignSelf: 'flex-end',
-        borderBottomWidth: 1,
+    content: {
+        //backgroundColor:'red',
+        width: 250
+
+    },
+    contentX: {
+        //backgroundColor:'black',
+
+    },
+    title: {
+        //backgroundColor:'yellow',
+        fontSize: 25
+    },
+
+    orderBoxContainer: {
+
+        /*backgroundColor: '#b7c1b9',
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        height: 300**/
+
+
+
     },
     box: {
+        backgroundColor: '#b7c1b9',
         paddingTop: 20,
+        marginVertical: 10
     },
-    textDetails: {
-        padding: 10
-    },
-    listContainer: {
-        transform: [{ translateY: 60 }],
-        width: '100%',
-        zIndex: 2,
-        backgroundColor: 'white',
-        position: 'absolute',
+    button: {
+        marginLeft: '32%',
+        borderRadius: 50,
+        marginTop: 10,
+        padding: 10,
+        alignItems: 'center',
+
+        width: 120,
+        zIndex: -1
+
 
     }
+
 })
 export default OrderPlacePage
 
 
 
-
-
-
-
-
-
-//showValue={showValuePeople ?? false}
+/**/

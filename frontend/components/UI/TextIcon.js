@@ -9,11 +9,11 @@ import Icon4 from 'react-native-vector-icons/MaterialCommunityIcons'
 const TextIcon = props => {
     let icon=<></>;
     if (props.typeIcon == 'Ionicons') {
-        icon = <Icon1 {...props} name={props.iconName} />
+        icon = <Icon1  {...props} name={props.iconName} />
     }
 
     if (props.typeIcon == 'FontAwesome') {
-        icon = <Icon2 {...props} name={props.iconName} />
+        icon = <Icon2 {...props}  name={props.iconName} />
     }
     if(props.typeIcon == 'EvilIcons'){
         icon = <Icon3 {...props} name={props.iconName}/>
@@ -24,8 +24,8 @@ const TextIcon = props => {
 
     return (
         <TouchableOpacity onPress={props.onPress ?? (() => { })} >
-            <View style={styles.cotainer}>
-                <Text style={styles.text}>{props.text ?? ''}</Text>
+            <View style={{...styles.cotainer,...props.style}}>
+                <Text style={{...styles.text,...props.styleText}}>{props.text ?? ''}</Text>
                 {icon}
             </View>
         </TouchableOpacity >
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontWeight: 'bold',
+        
 
     }
 })
