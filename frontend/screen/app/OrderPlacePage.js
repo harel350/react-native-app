@@ -4,13 +4,13 @@ import TextIcon from '../../components/UI/TextIcon'
 import BoxDetails from '../../components/UI/BoxDetails'
 import Autocomplete from 'react-native-dropdown-autocomplete-textinput'
 import AwesomeAlert from 'react-native-awesome-alerts'
+import SearchBox from '../../components/more/SearchBox'
+import MyButton from '../../components/UI/MyButton'
 
 const OrderPlacePage = (props) => {
     const [restaurantDetails, setrestaurantDetails] = useState({ restaurantName: '', restaurantAddress: 'לא נבחרה מסעדה', restaurantPhone: 'לא נבחרה מסעדה' })
-    const [searchList, setSearchList] = useState([])//make searchComponent
-    const [openList, setOpenList] = useState(false)//make searchComponent
     const [allFinishHour, setAllFinishHour] = useState([{ finishHour: '' }])//array of the available finish hour
-    
+
     const [allFieldFull, setAllFieldFull] = useState(false)//check valid if all the field are full
     const [orderDetails, setOrderDetails] = useState({ date: null, startHour: null, finishHour: null, sumOfPeople: null })
 
@@ -48,7 +48,7 @@ const OrderPlacePage = (props) => {
 
     }, [])
     useEffect(() => {
-        
+
         setAllFieldFull(false)
         const checkAllField = Object.values(orderDetails).find(item => item == null)
         if (checkAllField === undefined) {
@@ -75,25 +75,8 @@ const OrderPlacePage = (props) => {
         setOrderDetails({ ...orderDetails, ...peopleValue })
         setShowSummary(false)
     }
-    const changeTextHandle = async (text) => {
-
-        let isOpen = false
-        if (text != '') {
-
-            const response = await fetch(`http://localhost:4000/info/searchRestaurant/${text}`)
-            let searchListArray = await response.json()
-            setSearchList(searchListArray)
-            isOpen = true
-
-        }
-
-        let restaurantName = { restaurantName: text }
-        setrestaurantDetails({ ...restaurantDetails, ...restaurantName })
-        setOpenList(isOpen)
-    }
-    const searchPressHandle = async (text) => {
+    const searchPressHandle = (text) => {
         setrestaurantDetails(text)
-        setOpenList(false)
     }
     const checkHourButtonHandle = () => {
 
@@ -125,80 +108,70 @@ const OrderPlacePage = (props) => {
         })
         setShowSummary(false)
     }
-    const optionPlaceList = (<View style={styles.listContainer}>
 
-        {
-            openList && searchList.map((restOption, index) => {
-                return (<Text style={styles.textDetails} onPress={searchPressHandle.bind(this, restOption)} key={index}>{restOption.restaurantName} - {restOption.restaurantAddress}</Text>)
-            })
-        }
-    </View>)
     const summaryMessageAlert = (<View>
-            <Text>בתאריך : {orderDetails.date}</Text>
-            <Text>שעת התחלה : {orderDetails.startHour}</Text>
-            <Text>שעת סיום : {orderDetails.finishHour}</Text>
-            <Text>כמה אנשים : {orderDetails.sumOfPeople}</Text>
-        </View>)
-    
-   
+        <Text>בתאריך : {orderDetails.date}</Text>
+        <Text>שעת התחלה : {orderDetails.startHour}</Text>
+        <Text>שעת סיום : {orderDetails.finishHour}</Text>
+        <Text>כמה אנשים : {orderDetails.sumOfPeople}</Text>
+    </View>)
+
+
 
     return (
         <View>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder='הכנס שם מסעדה'
-                    value={restaurantDetails.restaurantName}
-                    onChangeText={changeTextHandle}
-                />
-            </View>
-            {optionPlaceList}
+
+            <SearchBox initialValue='' onPressItem={searchPressHandle} />
             <BoxDetails style={styles.box}>
-                <TextIcon size={30} text={restaurantDetails.restaurantPhone} iconName='call' typeIcon='Ionicons' />
+                <TextIcon size={30} text={restaurantDetails.restaurantPhone} iconName='phone-in-talk-outline' typeIcon='MaterialCommunityIcons' />
                 <TextIcon size={30} text={restaurantDetails.restaurantAddress} iconName='location-outline' typeIcon='Ionicons' />
             </BoxDetails>
-            <View>
-                <View style={{ flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse') }}>
-                    <Autocomplete
-                        data={dateArray}
-                        displayKey="date"
-                        onSelect={selectDateHandle}
-                        placeholder='תאריך'
-                        floatBottom
-                        isMandatory
-                        textInputStyle={{ width: '48%' }}
-                    />
-                    <Autocomplete
-                        data={peopleArray}
-                        displayKey="sumOfPeople"
-                        onSelect={selectPeopleHandle}
-                        placeholder='כמות אנשים'
-                        textInputStyle={{ width: '48%' }}
-                        floatBottom
-                        isMandatory
-                    />
-                </View>
-                <View style={{ flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse') }}>
-                    <Autocomplete
-                        data={allStartHour}
-                        displayKey="startHour"
-                        onSelect={selectHourHandle}
-                        placeholder='שעת התחלה'
-                        floatBottom
-                        isMandatory
-                        textInputStyle={{ width: '48%' }}
-                    />
-                    <Autocomplete
-                        data={allFinishHour}
-                        displayKey="finishHour"
-                        onSelect={selectHourHandle}
-                        placeholder='שעת סיום'
-                        floatBottom
-                        isMandatory
-                        textInputStyle={{ width: '48%' }}
-                    />
-                </View>
+
+            <View style={{ flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse') }}>
+                <Autocomplete
+                    data={dateArray}
+                    displayKey="date"
+                    onSelect={selectDateHandle}
+                    placeholder='תאריך'
+                    floatBottom
+                    isMandatory
+                    textInputStyle={{ width: '48%' }}
+                />
+                <Autocomplete
+                    data={peopleArray}
+                    displayKey="sumOfPeople"
+                    onSelect={selectPeopleHandle}
+                    placeholder='כמות אנשים'
+                    textInputStyle={{ width: '48%' }}
+                    floatBottom
+                    isMandatory
+                />
             </View>
-            <Button title="בדוק שעה" disabled={!allFieldFull} onPress={checkHourButtonHandle} />
+            <View style={{ flexDirection: (I18nManager.isRTL ? 'row' : 'row-reverse') }}>
+                <Autocomplete
+                    data={allStartHour}
+                    displayKey="startHour"
+                    onSelect={selectHourHandle}
+                    placeholder='שעת התחלה'
+                    floatBottom
+                    isMandatory
+                    textInputStyle={{ width: '48%' }}
+                />
+                <Autocomplete
+                    data={allFinishHour}
+                    displayKey="finishHour"
+                    onSelect={selectHourHandle}
+                    placeholder='שעת סיום'
+                    floatBottom
+                    isMandatory
+                    textInputStyle={{ width: '48%' }}
+                />
+                <Button  title="בדוק שעה" disabled={!allFieldFull} onPress={checkHourButtonHandle} />
+
+            </View>
+
+
+
             <AwesomeAlert
                 show={showSummary}
                 title='סיכום הזמנה'
@@ -215,58 +188,58 @@ const OrderPlacePage = (props) => {
                 titleStyle={styles.title}
                 messageStyle={styles.messageAlert}
             />
+
+
         </View>
     )
+
 }
 const styles = StyleSheet.create({
-    content:{
+    content: {
         //backgroundColor:'red',
-        width:250
-        
+        width: 250
+
     },
-    contentX:{
+    contentX: {
         //backgroundColor:'black',
-       
+
     },
     title: {
         //backgroundColor:'yellow',
         fontSize: 25
     },
-    
-    inputContainer: {
-        paddingTop: 10,
-        width: '90%',
-        alignSelf: 'flex-end',
-        borderBottomWidth: 1,
+
+    orderBoxContainer: {
+
+        /*backgroundColor: '#b7c1b9',
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        height: 300**/
+
+
+
     },
     box: {
+        backgroundColor: '#b7c1b9',
         paddingTop: 20,
+        marginVertical: 10
     },
-    textDetails: {
-        padding: 10
-    },
-    listContainer: {
-        transform: [{ translateY: 60 }],
-        width: '100%',
-        zIndex: 2,
-        backgroundColor: 'white',
-        position: 'absolute',
+    button: {
+        marginLeft: '32%',
+        borderRadius: 50,
+        marginTop: 10,
+        padding: 10,
+        alignItems: 'center',
+
+        width: 120,
+        zIndex: -1
+
 
     }
+
 })
 export default OrderPlacePage
 
 
 
-/**
- * {` 
-              בתאריך :  ${orderDetails.date}         
-              שעת התחלה : ${orderDetails.startHour}        
-              שעת סיום : ${orderDetails.finishHour}       
-              כמה אנשים : ${orderDetails.sumOfPeople}`}
- */
-
-
-
-
-//showValue={showValuePeople ?? false}
+/**/

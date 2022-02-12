@@ -9,11 +9,11 @@ import Icon4 from 'react-native-vector-icons/MaterialCommunityIcons'
 const TextIcon = props => {
     let icon=<></>;
     if (props.typeIcon == 'Ionicons') {
-        icon = <Icon1 {...props} name={props.iconName} />
+        icon = <Icon1  {...props} name={props.iconName} />
     }
 
     if (props.typeIcon == 'FontAwesome') {
-        icon = <Icon2 {...props} name={props.iconName} />
+        icon = <Icon2 {...props}  name={props.iconName} />
     }
     if(props.typeIcon == 'EvilIcons'){
         icon = <Icon3 {...props} name={props.iconName}/>
