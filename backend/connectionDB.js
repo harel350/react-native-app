@@ -1,10 +1,11 @@
+const password = require('./passForDb')
 const {Pool} = require('pg')
 
 const pool = new Pool({
     user : 'postgres',
     host : 'localhost',
     database : 'myAppDB',
-    password : 'Q1w2e3r4',
+    password : password.passwordForDb,
     port : 5432
    
 })
